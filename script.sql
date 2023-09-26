@@ -1,3 +1,19 @@
+--3 - Cursor vinculado
+DO $$
+DECLARE
+	cur_description_max_pais CURSOR FOR SELECT country, max(char_length(description)) as maior FROM tb_vinhos2 GROUP BY country ORDER BY max(char_length(description)) DESC;
+	tupla RECORD;
+BEGIN
+	OPEN cur_description_max_pais;
+	FETCH cur_description_max_pais INTO tupla;
+	WHILE FOUND LOOP
+		RAISE NOTICE 'A descricao maxima do pais % tem % caracteres', tupla.country, tupla.maior;
+		FETCH cur_description_max_pais INTO tupla;
+	END LOOP;
+	CLOSE cur_description_max_pais;
+END;
+$$
+
 -- 2 - Cursor não vinculado
 DO $$
 DECLARE
